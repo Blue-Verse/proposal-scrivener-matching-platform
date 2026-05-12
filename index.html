@@ -1,0 +1,954 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="행정사–의뢰인 견적 비교 매칭 플랫폼 — 프로젝트 제안서" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['SUIT Variable', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'monospace']
+          },
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              200: '#bae6fd',
+              600: '#0284c7',
+              700: '#0369a1'
+            }
+          },
+          boxShadow: {
+            soft: '0 10px 30px -18px rgba(15, 23, 42, 0.35)'
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    :root { color-scheme: light; font-size: 16px; }
+    body {
+      font-family: 'SUIT Variable', sans-serif;
+      font-size: 1rem;
+      background-image:
+        radial-gradient(circle at 12% 18%, rgba(14, 165, 233, 0.08), transparent 42%),
+        radial-gradient(circle at 88% 82%, rgba(2, 132, 199, 0.06), transparent 48%);
+    }
+
+    .doc-content h1, .doc-content h2, .doc-content h3, .doc-content h4 {
+      color: rgb(15 23 42); font-weight: 700; letter-spacing: -0.01em;
+      line-height: 1.3; margin-top: 1.6em; margin-bottom: 0.7em;
+    }
+    .doc-content h1 { font-size: 2rem; margin-top: 0.2em; }
+    .doc-content h2 { font-size: 1.4rem; }
+    .doc-content h3 { font-size: 1.15rem; }
+    .doc-content p, .doc-content li {
+      color: rgb(51 65 85); line-height: 1.8; font-size: 1rem;
+    }
+    .doc-content p, .doc-content ul, .doc-content ol,
+    .doc-content table, .doc-content pre, .doc-content blockquote {
+      margin-bottom: 1rem;
+    }
+    .doc-content ul, .doc-content ol { padding-left: 1.2rem; }
+    .doc-content ul { list-style: disc; }
+    .doc-content ol { list-style: decimal; }
+    .doc-content table {
+      width: 100%; border-collapse: collapse;
+      border: 1px solid rgb(226 232 240); border-radius: 0.75rem;
+      overflow: hidden; font-size: 1rem;
+    }
+    .doc-content th, .doc-content td {
+      border: 1px solid rgb(226 232 240); padding: 0.7rem 0.8rem;
+      text-align: left; vertical-align: top;
+    }
+    .doc-content th {
+      background: rgb(248 250 252); color: rgb(30 41 59); font-weight: 600;
+    }
+    .doc-content pre, .doc-content code {
+      font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+    }
+    .doc-content pre {
+      background: rgb(15 23 42); color: rgb(226 232 240);
+      padding: 1rem; border-radius: 0.75rem; overflow-x: auto;
+      font-size: 1rem; line-height: 1.65;
+    }
+    .doc-content p code, .doc-content li code,
+    .doc-content td code, .doc-content th code {
+      background: rgb(241 245 249); color: rgb(15 23 42);
+      border: 1px solid rgb(226 232 240); border-radius: 0.4rem;
+      padding: 0.08rem 0.4rem; font-size: 1em;
+    }
+    .doc-content blockquote {
+      border-left: 3px solid rgb(14 165 233); padding-left: 0.85rem;
+      color: rgb(71 85 105); background: rgb(240 249 255);
+      border-radius: 0.5rem; padding-top: 0.55rem; padding-bottom: 0.55rem;
+    }
+
+    .text-xs { font-size: 1rem !important; }
+
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: ''; position: absolute; left: 0.6rem; top: 0.25rem; bottom: 0.25rem;
+      width: 2px; background: rgb(186 230 253);
+    }
+    .timeline-item { position: relative; margin-bottom: 1.75rem; }
+    .timeline-item::before {
+      content: ''; position: absolute; left: -1.65rem; top: 0.35rem;
+      width: 0.75rem; height: 0.75rem; border-radius: 50%;
+      background: rgb(2 132 199); border: 3px solid rgb(224 242 254);
+    }
+
+    .page-section { display: none; }
+    .page-section.active { display: block; }
+
+    #sidebar-backdrop { display: none; }
+    #sidebar-backdrop.open { display: block; }
+    @media (max-width: 1023px) {
+      #sidebar { transform: translateX(-100%); transition: transform 0.2s ease; position: fixed; top: 0; left: 0; z-index: 40; height: 100vh; width: 80vw; max-width: 320px; }
+      #sidebar.open { transform: translateX(0); }
+    }
+  </style>
+  <title>행정사–의뢰인 견적 비교 매칭 플랫폼 — 프로젝트 제안서</title>
+</head>
+<body class="text-slate-800 font-sans antialiased">
+  <div class="mx-auto max-w-7xl px-4 py-6 md:px-8 md:py-10">
+
+    <header class="mb-6 rounded-2xl border border-slate-200/70 bg-white/85 px-5 py-3 shadow-soft backdrop-blur">
+      <div class="flex flex-wrap items-center gap-3">
+        <button id="sidebar-toggle" class="lg:hidden inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-3 py-1 text-sm font-medium text-slate-700 hover:border-sky-300 hover:text-sky-700">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          메뉴
+        </button>
+        <a href="#home" class="inline-flex items-center shrink-0 text-sm font-bold tracking-tight text-slate-800">
+          프로젝트 제안서
+        </a>
+        <div class="hidden sm:block ml-auto text-right">
+          <p class="text-sm font-semibold tracking-[0.04em] text-sky-700/90">행정사–의뢰인 견적 비교 매칭 플랫폼</p>
+          <p class="text-xs text-slate-400">프로젝트 제안서</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="grid gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
+
+      <div id="sidebar-backdrop" class="fixed inset-0 bg-black/30 z-30 lg:hidden" onclick="closeSidebar()"></div>
+      <aside id="sidebar" class="rounded-2xl border border-slate-200/70 bg-white/90 p-4 shadow-soft backdrop-blur lg:sticky lg:top-6 lg:h-[calc(100vh-4rem)] lg:overflow-auto">
+        <nav id="nav" class="space-y-1">
+          <a href="#home" data-page="home" class="nav-link block rounded-xl border px-3 py-2 text-sm border-sky-200 bg-sky-50 font-medium text-sky-700">홈</a>
+          <div class="my-3 border-t border-slate-200"></div>
+          <p class="mb-2 mt-1 px-1 text-sm font-semibold tracking-[0.14em] text-slate-400">제안서</p>
+          <a href="#overview" data-page="overview" class="nav-link block rounded-xl border border-transparent px-3 py-2 text-sm text-slate-600 hover:border-slate-200 hover:bg-slate-50 hover:text-slate-900">프로젝트 소개</a>
+          <a href="#estimate" data-page="estimate" class="nav-link block rounded-xl border border-transparent px-3 py-2 text-sm text-slate-600 hover:border-slate-200 hover:bg-slate-50 hover:text-slate-900">견적서</a>
+          <a href="#manday" data-page="manday" class="nav-link block rounded-xl border border-transparent px-3 py-2 text-sm text-slate-600 hover:border-slate-200 hover:bg-slate-50 hover:text-slate-900">공수계산서</a>
+          <a href="#prd" data-page="prd" class="nav-link block rounded-xl border border-transparent px-3 py-2 text-sm text-slate-600 hover:border-slate-200 hover:bg-slate-50 hover:text-slate-900">PRD</a>
+          <div class="my-3 border-t border-slate-200"></div>
+          <p class="mb-2 mt-1 px-1 text-sm font-semibold tracking-[0.14em] text-slate-400">일정 & 경험</p>
+          <a href="#timeline" data-page="timeline" class="nav-link block rounded-xl border border-transparent px-3 py-2 text-sm text-slate-600 hover:border-slate-200 hover:bg-slate-50 hover:text-slate-900">일정 제안</a>
+          <a href="#portfolio" data-page="portfolio" class="nav-link block rounded-xl border border-transparent px-3 py-2 text-sm text-slate-600 hover:border-slate-200 hover:bg-slate-50 hover:text-slate-900">유사 프로젝트 경험</a>
+        </nav>
+      </aside>
+
+      <main class="min-w-0">
+
+        <!-- Home -->
+        <div id="page-home" class="page-section active space-y-6">
+          <div class="rounded-2xl border border-slate-200/70 bg-white/95 p-6 shadow-soft backdrop-blur md:p-8">
+            <p class="mb-2 text-xs font-semibold tracking-[0.2em] text-sky-700/80">프로젝트 제안서</p>
+            <h1 class="text-2xl font-bold tracking-tight text-slate-900 md:text-3xl">행정사–의뢰인 견적 비교 매칭 플랫폼</h1>
+            <p class="mt-3 max-w-3xl text-sm leading-7 text-slate-600 md:text-base">행정 업무가 필요한 일반 소비자와 전문 행정사를 연결하는 견적 비교 플랫폼입니다. 의뢰서 작성–견적 비교–1:1 메시지–매칭 후 별점 리뷰까지 행정 시장의 정보 비대칭성을 해소하는 반응형 O2O 매칭 플랫폼을 90일 내 안정적으로 구축합니다.</p>
+            <div class="mt-4 flex flex-wrap items-center gap-2">
+              <span class="inline-flex rounded-full border border-sky-200 bg-sky-100 px-2.5 py-1 text-sm font-semibold tracking-[0.12em] text-sky-700">22,500,000원</span>
+              <span class="inline-flex rounded-full border border-sky-200 bg-sky-100 px-2.5 py-1 text-sm font-semibold tracking-[0.12em] text-sky-700">90일</span>
+              <span class="inline-flex rounded-full border border-amber-200 bg-amber-100 px-2.5 py-1 text-sm font-semibold tracking-[0.12em] text-amber-700">웹 · O2O 매칭 플랫폼</span>
+              <a href="https://www.wishket.com/project/155262/" target="_blank" rel="noopener noreferrer"
+                 class="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-2.5 py-1 text-sm font-medium text-slate-500 transition hover:border-sky-300 hover:text-sky-700">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                원본 공고
+              </a>
+            </div>
+          </div>
+
+          <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <a href="#overview" class="group rounded-2xl border border-slate-200/70 bg-white/90 p-5 shadow-soft transition hover:-translate-y-0.5 hover:border-sky-200 hover:bg-white">
+              <div class="mb-3 inline-flex rounded-full border px-2.5 py-1 text-sm font-semibold tracking-[0.12em] bg-sky-100 text-sky-700 border-sky-200">소개</div>
+              <h2 class="text-lg font-semibold tracking-tight text-slate-900 group-hover:text-sky-700">프로젝트 소개</h2>
+              <p class="mt-2 text-sm leading-7 text-slate-600">프로젝트 분석, 핵심 요구사항 정리, 제안 포인트</p>
+            </a>
+            <a href="#estimate" class="group rounded-2xl border border-slate-200/70 bg-white/90 p-5 shadow-soft transition hover:-translate-y-0.5 hover:border-sky-200 hover:bg-white">
+              <div class="mb-3 inline-flex rounded-full border px-2.5 py-1 text-sm font-semibold tracking-[0.12em] bg-sky-100 text-sky-700 border-sky-200">비용</div>
+              <h2 class="text-lg font-semibold tracking-tight text-slate-900 group-hover:text-sky-700">견적서</h2>
+              <p class="mt-2 text-sm leading-7 text-slate-600">항목별 비용 산출 근거 및 상세 견적</p>
+            </a>
+            <a href="#manday" class="group rounded-2xl border border-slate-200/70 bg-white/90 p-5 shadow-soft transition hover:-translate-y-0.5 hover:border-sky-200 hover:bg-white">
+              <div class="mb-3 inline-flex rounded-full border px-2.5 py-1 text-sm font-semibold tracking-[0.12em] bg-sky-100 text-sky-700 border-sky-200">공수</div>
+              <h2 class="text-lg font-semibold tracking-tight text-slate-900 group-hover:text-sky-700">공수계산서</h2>
+              <p class="mt-2 text-sm leading-7 text-slate-600">기능별 개발 공수(man-day) 산출 내역</p>
+            </a>
+            <a href="#prd" class="group rounded-2xl border border-slate-200/70 bg-white/90 p-5 shadow-soft transition hover:-translate-y-0.5 hover:border-sky-200 hover:bg-white">
+              <div class="mb-3 inline-flex rounded-full border px-2.5 py-1 text-sm font-semibold tracking-[0.12em] bg-amber-100 text-amber-700 border-amber-200">기획</div>
+              <h2 class="text-lg font-semibold tracking-tight text-slate-900 group-hover:text-sky-700">PRD</h2>
+              <p class="mt-2 text-sm leading-7 text-slate-600">기능 요구사항 정의서, 사용자 스토리, 기술 제약</p>
+            </a>
+            <a href="#timeline" class="group rounded-2xl border border-slate-200/70 bg-white/90 p-5 shadow-soft transition hover:-translate-y-0.5 hover:border-sky-200 hover:bg-white">
+              <div class="mb-3 inline-flex rounded-full border px-2.5 py-1 text-sm font-semibold tracking-[0.12em] bg-amber-100 text-amber-700 border-amber-200">일정</div>
+              <h2 class="text-lg font-semibold tracking-tight text-slate-900 group-hover:text-sky-700">일정 제안</h2>
+              <p class="mt-2 text-sm leading-7 text-slate-600">단계별 마일스톤 및 산출물 일정표</p>
+            </a>
+            <a href="#portfolio" class="group rounded-2xl border border-slate-200/70 bg-white/90 p-5 shadow-soft transition hover:-translate-y-0.5 hover:border-sky-200 hover:bg-white">
+              <div class="mb-3 inline-flex rounded-full border px-2.5 py-1 text-sm font-semibold tracking-[0.12em] bg-amber-100 text-amber-700 border-amber-200">경험</div>
+              <h2 class="text-lg font-semibold tracking-tight text-slate-900 group-hover:text-sky-700">유사 프로젝트 경험</h2>
+              <p class="mt-2 text-sm leading-7 text-slate-600">유사 매칭 플랫폼 / 인증 워크플로우 수행 경험</p>
+            </a>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+            <div class="rounded-2xl border border-slate-200/70 bg-white/90 p-4 text-center shadow-soft backdrop-blur">
+              <p class="text-2xl font-bold text-sky-700">13+</p>
+              <p class="mt-1 text-sm text-slate-500">완료 프로젝트</p>
+            </div>
+            <div class="rounded-2xl border border-slate-200/70 bg-white/90 p-4 text-center shadow-soft backdrop-blur">
+              <p class="text-2xl font-bold text-sky-700">4건</p>
+              <p class="mt-1 text-sm text-slate-500">유사 매칭/플랫폼 경험</p>
+            </div>
+            <div class="rounded-2xl border border-slate-200/70 bg-white/90 p-4 text-center shadow-soft backdrop-blur">
+              <p class="text-2xl font-bold text-sky-700">90일</p>
+              <p class="mt-1 text-sm text-slate-500">단계별 납품 일정</p>
+            </div>
+            <div class="rounded-2xl border border-slate-200/70 bg-white/90 p-4 text-center shadow-soft backdrop-blur">
+              <p class="text-2xl font-bold text-sky-700">100%</p>
+              <p class="mt-1 text-sm text-slate-500">기획~배포 풀스택 책임</p>
+            </div>
+          </div>
+
+          <div class="rounded-2xl border border-sky-200/70 bg-gradient-to-br from-sky-50 to-brand-50 p-6 text-center shadow-soft md:p-10">
+            <h2 class="text-xl font-bold tracking-tight text-slate-900 md:text-2xl">함께 만들어 가겠습니다</h2>
+            <p class="mx-auto mt-3 max-w-lg text-sm leading-7 text-slate-600">각 메뉴를 클릭하시면 상세 내용을 확인하실 수 있습니다.</p>
+          </div>
+        </div>
+
+        <!-- Overview -->
+        <div id="page-overview" class="page-section space-y-6">
+          <div class="rounded-2xl border border-slate-200/70 bg-white/95 p-5 shadow-soft backdrop-blur md:p-8">
+            <article class="doc-content">
+              <h1>프로젝트 소개</h1>
+              <blockquote>행정 업무가 필요한 일반 소비자와 전문 행정사를 연결하는 견적 비교 플랫폼입니다. 의뢰서 작성–견적 비교–1:1 메시지–매칭 후 별점 리뷰까지 행정 시장의 정보 비대칭성을 해소하는 반응형 O2O 매칭 플랫폼을 90일 내 안정적으로 구축합니다.</blockquote>
+
+              <h2>프로젝트 개요</h2>
+              <table>
+                <tr><th>항목</th><th>내용</th></tr>
+                <tr><td>프로젝트명</td><td><a href="https://www.wishket.com/project/155262/" target="_blank" rel="noopener noreferrer" class="text-sky-700 underline decoration-sky-300 hover:decoration-sky-500">행정사–의뢰인 견적 비교 매칭 플랫폼</a></td></tr>
+                <tr><td>카테고리</td><td>웹 · O2O 매칭 플랫폼 / 통계 대시보드 / 커뮤니티</td></tr>
+                <tr><td>제안 금액</td><td>22,500,000원 (VAT 별도)</td></tr>
+                <tr><td>제안 기간</td><td>90일 (계약 직후 즉시 착수, 12주)</td></tr>
+                <tr><td>핵심 기술</td><td>Next.js 14 · NestJS 10 · TypeScript · PostgreSQL · Sendbird · AWS S3·CloudFront · 카카오 알림톡 BizMessage</td></tr>
+              </table>
+
+              <h2>핵심 요구사항 분석</h2>
+              <ul>
+                <li>3-actor 반응형 웹 통합 설계 (의뢰인 / 행정사 / 관리자)</li>
+                <li>카테고리(음주운전·인허가·비자 등) 기반 의뢰서 작성 + 멀티파트 파일 업로드</li>
+                <li>수신된 행정사 견적 비교함 (금액·프로필·리뷰 별점 요약)</li>
+                <li>매칭 전 1:1 메시지(채팅/문의) 송수신, 매칭 후 별점 + 텍스트 리뷰</li>
+                <li>행정사 사업자등록증·자격증 업로드 → 관리자 승인/반려 워크플로우</li>
+                <li>전문 분야 매칭 시 카카오 알림톡 발송 + 견적서 페이지 딥링크</li>
+                <li>일·주 단위 가입자/의뢰 건수/매칭 성공률 통계 대시보드</li>
+                <li>의뢰인 연락처 블라인드 처리 (개인정보 보호)</li>
+                <li>소셜 로그인 (카카오 / 네이버 / Google)</li>
+                <li>AWS S3 라이프사이클 기반 대용량 파일 보관 아키텍처</li>
+              </ul>
+
+              <h2>제안 포인트</h2>
+              <h3>1. 도메인 정확도: "행정 워크플로우 + 자격증 인증" 직접 경험</h3>
+              <p>본 프로젝트는 단순 매칭이 아니라 <strong>전문가 자격증 검증 → 의뢰 매칭 → 견적 비교 → 매칭 완료 → 리뷰</strong>의 5단계 워크플로우입니다. 유사 프로젝트(시니어 주간보호 관리 플랫폼)에서 보호자/요양보호사/관리자 3-actor + 자격 인증 + 알림 워크플로우를 풀스택으로 구축한 경험을 그대로 적용합니다.</p>
+
+              <h3>2. 90일 내 단계별 납품 — 4·8·10·12주 마일스톤 준수</h3>
+              <p>클라이언트 일정(4주 기획/디자인 컨펌, 8주 핵심 기능 개발 완료, 10주 통합 테스트, 12주 오픈)을 그대로 수용하여 단계별 산출물로 진행합니다. 각 마일스톤에서 화면 시연 + 산출물 문서를 함께 검수받아 후반 리스크를 미연에 차단합니다.</p>
+
+              <h3>3. 외부 API 안정성 — 카카오 알림톡 + 딥링크 검증된 구현 패턴</h3>
+              <p>카카오 알림톡 BizMessage API + 서명 토큰 기반 딥링크는 핀테크/SaaS 프로젝트에서 다회 구현한 검증된 패턴입니다. 발송 실패 시 SQS 재시도 큐 + LMS 폴백까지 자동화하여 "행정사가 즉시 인지" 요구사항을 충족합니다.</p>
+
+              <h3>4. 장기 비용 최적화 — S3 라이프사이클 자동 전이</h3>
+              <p>증거용 이미지/영상/대용량 서류의 장기 보관 비용을 60~70% 절감하는 S3 Standard → Standard-IA → Glacier Instant Retrieval 자동 전이 정책을 적용합니다. 데이터 손실 방지를 위한 Cross-Region Replication + 버전 관리도 기본 포함합니다.</p>
+
+              <h3>5. 산출물 완성도 우선 — 클라이언트 #1 우선순위 직접 매핑</h3>
+              <p>클라이언트가 명시한 우선순위(#1 산출물 완성도, #2 일정 준수, #3 금액)에 맞춰, 산출물 기준(스토리보드·디자인 원본·ERD·아키텍처 다이어그램·소스 코드·관리자 매뉴얼·유지보수 가이드) 완성도를 가장 우선으로 관리합니다.</p>
+
+              <h2>사용 기술 및 툴</h2>
+              <h3>개발 기술</h3>
+              <div class="flex flex-wrap gap-2 not-prose mb-4">
+                <span class="rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-sm font-medium text-sky-700">Next.js 14</span>
+                <span class="rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-sm font-medium text-sky-700">React 18</span>
+                <span class="rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-sm font-medium text-sky-700">TypeScript</span>
+                <span class="rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-sm font-medium text-sky-700">TailwindCSS</span>
+                <span class="rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-sm font-medium text-sky-700">NestJS 10</span>
+                <span class="rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-sm font-medium text-sky-700">Node.js 20</span>
+                <span class="rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-sm font-medium text-sky-700">PostgreSQL 15</span>
+                <span class="rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-sm font-medium text-sky-700">Redis</span>
+                <span class="rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-sm font-medium text-sky-700">Sendbird</span>
+                <span class="rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-sm font-medium text-sky-700">AWS S3 + CloudFront</span>
+                <span class="rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-sm font-medium text-sky-700">AWS EC2 / RDS / Lambda / SQS</span>
+                <span class="rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-sm font-medium text-sky-700">Kakao Alimtalk BizMessage</span>
+                <span class="rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-sm font-medium text-sky-700">Chart.js</span>
+                <span class="rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-sm font-medium text-sky-700">Docker</span>
+                <span class="rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-sm font-medium text-sky-700">GitHub Actions</span>
+              </div>
+              <h3>협업 및 커뮤니케이션</h3>
+              <div class="flex flex-wrap gap-2 not-prose">
+                <span class="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-sm font-medium text-amber-700">Slack / 카카오톡</span>
+                <span class="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-sm font-medium text-amber-700">Zoom / Google Meet</span>
+                <span class="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-sm font-medium text-amber-700">Figma</span>
+                <span class="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-sm font-medium text-amber-700">Notion</span>
+                <span class="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-sm font-medium text-amber-700">GitHub Issues</span>
+                <span class="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-sm font-medium text-amber-700">Google Drive</span>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <!-- Estimate -->
+        <div id="page-estimate" class="page-section space-y-6">
+          <div class="rounded-2xl border border-slate-200/70 bg-white/95 p-5 shadow-soft backdrop-blur md:p-8">
+            <article class="doc-content">
+              <h1>견적서</h1>
+              <blockquote>본 견적서는 프로젝트 요구사항 분석 및 유사 프로젝트 수행 경험을 기반으로 산출되었습니다.</blockquote>
+
+              <h2>견적 요약</h2>
+              <table>
+                <tr><th>항목</th><th>내용</th></tr>
+                <tr><td>프로젝트명</td><td>행정사–의뢰인 견적 비교 매칭 플랫폼</td></tr>
+                <tr><td>제안 금액</td><td><strong>22,500,000원 (VAT 별도)</strong></td></tr>
+                <tr><td>제안 기간</td><td>90일 (12주, 계약 직후 즉시 착수)</td></tr>
+                <tr><td>견적 유효기간</td><td>제안일로부터 30일</td></tr>
+              </table>
+
+              <h2>상세 견적 내역</h2>
+              <table>
+                <thead>
+                  <tr><th>구분</th><th>항목</th><th>수량</th><th>비율</th><th>금액</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>기획</td><td>요구사항 분석, 화면 설계서(스토리보드), 정책 정의</td><td>1식</td><td>11%</td><td>2,500,000원</td></tr>
+                  <tr><td>디자인</td><td>반응형 UI/UX 디자인 + 퍼블리싱 (의뢰인 / 행정사 / 관리자)</td><td>1식</td><td>18%</td><td>4,000,000원</td></tr>
+                  <tr><td>프론트엔드</td><td>의뢰인·행정사·관리자 웹 화면 개발 (반응형)</td><td>1식</td><td>31%</td><td>7,000,000원</td></tr>
+                  <tr><td>백엔드</td><td>API 서버, 채팅 통합, 알림톡 발송, 파일 스토리지, 인증/권한</td><td>1식</td><td>29%</td><td>6,500,000원</td></tr>
+                  <tr><td>DB 설계</td><td>ERD 설계, 마이그레이션, 시드 데이터</td><td>1식</td><td>3%</td><td>700,000원</td></tr>
+                  <tr><td>인프라</td><td>AWS 클라우드 구성 (EC2/RDS/S3/CloudFront/SQS), CI/CD</td><td>1식</td><td>4%</td><td>800,000원</td></tr>
+                  <tr><td>QA</td><td>통합 테스트, 부하 테스트, 배포 및 모니터링</td><td>1식</td><td>4%</td><td>1,000,000원</td></tr>
+                </tbody>
+                <tfoot>
+                  <tr><th colspan="4">합계 (VAT 별도)</th><th>22,500,000원</th></tr>
+                </tfoot>
+              </table>
+
+              <h2>산정 근거</h2>
+              <ul>
+                <li><strong>유사 프로젝트 평균</strong>: 다중 액터 O2O 매칭 플랫폼(시니어 주간보호 관리, 디지털 명함 네트워킹) 기준 동등 규모 ±10% 범위</li>
+                <li><strong>외부 API 연동 복잡도</strong>: 카카오 알림톡(BizMessage) + 소셜 로그인 3종 + Sendbird → 외부 의존도 가산</li>
+                <li><strong>3-actor 화면 규모</strong>: 의뢰인 ~15화면 / 행정사 ~12화면 / 관리자 ~15화면 = 약 42화면 반응형</li>
+                <li><strong>인증·승인 워크플로우</strong>: 자격증 업로드·관리자 승인/반려·블라인드 처리 → 별도 워크플로우 모듈로 산정</li>
+                <li><strong>장기 데이터 관리 아키텍처</strong>: S3 라이프사이클 정책 + Cross-Region Replication 설계 포함</li>
+              </ul>
+
+              <h2>포함 사항</h2>
+              <ul>
+                <li>화면 설계서(스토리보드) 및 Figma 디자인 원본 파일</li>
+                <li>시스템 아키텍처 다이어그램 및 DB 설계서(ERD)</li>
+                <li>개발 원본 소스 코드 및 Git 저장소 이전 (의뢰인·행정사·관리자·API 서버)</li>
+                <li>API 명세서 (OpenAPI/Swagger), DB 스키마, 배포 가이드</li>
+                <li>관리자 매뉴얼 (자격증 승인, 알림톡 트리거, 통계 사용법)</li>
+                <li>AWS 인프라 IaC 코드(테라폼 or CDK) 및 배포 환경 세팅 1회</li>
+                <li>1개월 무상 하자 보수 (오픈 후)</li>
+              </ul>
+
+              <h2>불포함 사항</h2>
+              <ul>
+                <li>AWS 호스팅 / 도메인 / SSL 인증서 비용 (실사용량 기준 별도 청구 또는 클라이언트 직접 결제)</li>
+                <li>카카오 알림톡 발송 단가, 소셜 로그인 API 사용료, Sendbird 라이선스 비용</li>
+                <li>NICE 본인인증·사업자등록 진위확인 API 사용료 (필요 시 별도 협의)</li>
+                <li>하자 보수 기간 이후 유지보수 (월 단위 별도 계약)</li>
+                <li>운영 단계 콘텐츠/마케팅 비용</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+
+        <!-- Manday -->
+        <div id="page-manday" class="page-section space-y-6">
+          <div class="rounded-2xl border border-slate-200/70 bg-white/95 p-5 shadow-soft backdrop-blur md:p-8">
+            <article class="doc-content">
+              <h1>공수계산서</h1>
+              <blockquote>기능별 개발 공수(Man-Day)를 산출하여 일정과 비용의 근거를 제시합니다.</blockquote>
+
+              <h2>공수 요약</h2>
+              <table>
+                <tr><th>구분</th><th>공수 (M/D)</th><th>비율</th></tr>
+                <tr><td>기획/PRD/설계</td><td>8 M/D</td><td>10%</td></tr>
+                <tr><td>UI/UX 디자인 (반응형 3 surfaces)</td><td>14 M/D</td><td>17%</td></tr>
+                <tr><td>프론트엔드 (의뢰인 + 행정사 + 관리자)</td><td>22 M/D</td><td>27%</td></tr>
+                <tr><td>백엔드 (API · 채팅 · 알림톡 · 스토리지)</td><td>25 M/D</td><td>31%</td></tr>
+                <tr><td>DB 설계/구축</td><td>3 M/D</td><td>4%</td></tr>
+                <tr><td>DevOps/인프라/CI·CD</td><td>3 M/D</td><td>4%</td></tr>
+                <tr><td>QA/통합 테스트/배포</td><td>5 M/D</td><td>7%</td></tr>
+                <tr><th>합계</th><th>80 M/D</th><th>100%</th></tr>
+              </table>
+
+              <h2>기능별 상세 공수</h2>
+              <table>
+                <thead>
+                  <tr><th>기능 영역</th><th>세부 작업</th><th>담당</th><th>공수 (M/D)</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td rowspan="3">기획/설계</td><td>요구사항 분석, IA, 정책 정의</td><td>기획</td><td>3</td></tr>
+                  <tr><td>화면 설계서(스토리보드, 약 42화면)</td><td>기획</td><td>4</td></tr>
+                  <tr><td>ERD 및 API 명세 초안</td><td>기획</td><td>1</td></tr>
+
+                  <tr><td rowspan="3">UI/UX 디자인</td><td>디자인 시스템, 컬러/타이포/컴포넌트</td><td>디자인</td><td>2</td></tr>
+                  <tr><td>의뢰인 + 행정사 화면 디자인 (반응형)</td><td>디자인</td><td>7</td></tr>
+                  <tr><td>관리자 화면 디자인 (대시보드 포함)</td><td>디자인</td><td>5</td></tr>
+
+                  <tr><td rowspan="2">인증/회원</td><td>의뢰인 회원가입 + 소셜 로그인(카카오/네이버/Google)</td><td>FE+BE</td><td>3</td></tr>
+                  <tr><td>행정사 회원가입 + 사업자등록증/자격증 업로드</td><td>FE+BE</td><td>3</td></tr>
+
+                  <tr><td rowspan="2">의뢰서</td><td>카테고리 기반 의뢰서 작성 폼 + 파일 업로드(S3 multipart)</td><td>FE+BE</td><td>5</td></tr>
+                  <tr><td>의뢰서 목록/상세, 의뢰인 연락처 블라인드</td><td>FE+BE</td><td>3</td></tr>
+
+                  <tr><td rowspan="2">견적/매칭</td><td>행정사 견적서 제출 폼 (금액·기간·메시지)</td><td>FE+BE</td><td>4</td></tr>
+                  <tr><td>의뢰인 견적 비교함 (금액·프로필·별점 요약)</td><td>FE+BE</td><td>4</td></tr>
+
+                  <tr><td rowspan="2">1:1 메시지</td><td>Sendbird 통합 및 채팅 UI</td><td>FE+BE</td><td>5</td></tr>
+                  <tr><td>채팅 권한/세션 관리</td><td>BE</td><td>2</td></tr>
+
+                  <tr><td>리뷰</td><td>매칭 완료 후 별점 + 텍스트 리뷰</td><td>FE+BE</td><td>2</td></tr>
+
+                  <tr><td rowspan="3">알림</td><td>카카오 알림톡 BizMessage 연동</td><td>BE</td><td>3</td></tr>
+                  <tr><td>딥링크 서명 토큰 + 자동 로그인 리다이렉트</td><td>BE</td><td>2</td></tr>
+                  <tr><td>발송 큐(SQS) + 실패 재시도 + LMS 폴백</td><td>BE</td><td>2</td></tr>
+
+                  <tr><td rowspan="4">관리자</td><td>통계 대시보드 (가입자/의뢰/매칭 성공률)</td><td>FE+BE</td><td>3</td></tr>
+                  <tr><td>회원·행정사 계정 관리</td><td>FE+BE</td><td>2</td></tr>
+                  <tr><td>자격증 뷰어 + 승인/반려(사유)</td><td>FE+BE</td><td>3</td></tr>
+                  <tr><td>알림톡 템플릿 트리거 관리 UI</td><td>FE+BE</td><td>2</td></tr>
+
+                  <tr><td rowspan="2">인프라</td><td>AWS 환경(EC2/RDS/S3/CloudFront/SQS) + S3 라이프사이클</td><td>DevOps</td><td>2</td></tr>
+                  <tr><td>CI/CD 파이프라인 + 모니터링/로깅</td><td>DevOps</td><td>1</td></tr>
+
+                  <tr><td>QA</td><td>통합 테스트, 보안 점검, 배포 리허설</td><td>QA</td><td>5</td></tr>
+                </tbody>
+              </table>
+
+              <h2>산정 기준</h2>
+              <ul>
+                <li>1 M/D = 8시간 기준 (1인 1일 작업량)</li>
+                <li>주 5일 근무 기준, 버퍼 10~15% 포함</li>
+                <li>유사 프로젝트 수행 경험 기반 효율적 개발 일정 산정</li>
+                <li>외부 API 연동 모듈은 별도 검증 시간 가산 (카카오 알림톡, Sendbird, 소셜 로그인)</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+
+        <!-- PRD -->
+        <div id="page-prd" class="page-section space-y-6">
+          <div class="rounded-2xl border border-slate-200/70 bg-white/95 p-5 shadow-soft backdrop-blur md:p-8">
+            <article class="doc-content">
+              <h1>PRD (Product Requirements Document)</h1>
+              <blockquote>프로젝트 요구사항을 정의하고 기능 범위를 명확히 합니다.</blockquote>
+
+              <h2>1. 프로젝트 배경 및 목적</h2>
+              <p>행정 업무(음주운전 구제, 인허가, 비자, 외국인등록 등)는 일반 소비자가 어디서 누구에게 의뢰해야 하는지 정보가 파편화되어 있고, 견적도 행정사마다 천차만별인 시장입니다. 본 플랫폼은 의뢰인이 한 번의 의뢰서 작성으로 복수 행정사로부터 견적을 받고, 별점·리뷰·1:1 메시지를 통해 투명하게 비교·선택하는 견적 비교 플랫폼을 구축합니다.</p>
+              <p>최종 목표는 <strong>"행정 시장의 정보 비대칭성 해소 + 투명한 견적 제공"</strong>이며, 90일 내 안정적인 코어 MVP를 오픈하여 시장 검증을 진행할 수 있는 수준의 산출물을 납품합니다.</p>
+
+              <h2>2. 사용자 정의</h2>
+              <table>
+                <thead>
+                  <tr><th>사용자 유형</th><th>설명</th><th>주요 기능</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>의뢰인 (Client)</td>
+                    <td>행정 업무가 필요한 일반 소비자</td>
+                    <td>회원가입, 의뢰서 작성, 견적 비교, 1:1 메시지, 별점 리뷰, 알림톡 수신</td>
+                  </tr>
+                  <tr>
+                    <td>행정사 (Scrivener)</td>
+                    <td>자격증 보유 전문 행정사</td>
+                    <td>자격증 업로드, 프로필 관리, 신규 의뢰 알림 수신, 견적서 제출, 1:1 메시지</td>
+                  </tr>
+                  <tr>
+                    <td>관리자 (Admin)</td>
+                    <td>플랫폼 운영자</td>
+                    <td>통계 대시보드, 회원·행정사 관리, 자격증 승인/반려, 매칭 모니터링, 알림톡 템플릿 관리</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <h2>3. 기능 요구사항</h2>
+
+              <h3>3.1 의뢰인 (Client)</h3>
+              <ul>
+                <li><strong>[필수]</strong> 통합 회원가입 (이메일 + 비밀번호) 및 소셜 로그인 (카카오 / 네이버 / Google)</li>
+                <li><strong>[필수]</strong> 카테고리(음주운전·인허가·비자 등) 선택 기반 의뢰서 작성</li>
+                <li><strong>[필수]</strong> 의뢰서 텍스트 입력 + 파일 업로드 (PDF/이미지/영상, S3 multipart)</li>
+                <li><strong>[필수]</strong> 수신된 행정사 견적 비교함 (금액·프로필·리뷰 별점 요약)</li>
+                <li><strong>[필수]</strong> 행정사 선정 전 1:1 메시지(채팅/문의) 송수신</li>
+                <li><strong>[필수]</strong> 매칭/상담 완료 후 별점 + 텍스트 리뷰 작성</li>
+                <li><strong>[필수]</strong> 카카오 알림톡 수신 (견적 도착 시)</li>
+              </ul>
+
+              <h3>3.2 행정사 (Scrivener)</h3>
+              <ul>
+                <li><strong>[필수]</strong> 행정사 전용 회원가입 + 사업자등록증·자격증 파일 업로드</li>
+                <li><strong>[필수]</strong> 전문 분야(다중 카테고리) + 상세 경력 + 포트폴리오 프로필 관리</li>
+                <li><strong>[필수]</strong> 본인 전문 분야와 일치하는 신규 의뢰 발생 시 실시간 알림톡 수신</li>
+                <li><strong>[필수]</strong> 의뢰 상세 내용 확인 (의뢰인 연락처 블라인드 처리)</li>
+                <li><strong>[필수]</strong> 예상 청구 비용·업무 처리 기간·상세 제안 메시지 포함 견적서 제출</li>
+                <li><strong>[필수]</strong> 의뢰인과의 1:1 메시지(채팅/문의) 송수신</li>
+              </ul>
+
+              <h3>3.3 관리자 (Admin)</h3>
+              <ul>
+                <li><strong>[필수]</strong> 일간/주간 가입자, 의뢰 건수, 매칭 성공률 통계 대시보드</li>
+                <li><strong>[필수]</strong> 일반 회원 및 행정사 계정 관리 (검색·정지·삭제)</li>
+                <li><strong>[필수]</strong> 행정사 가입 시 제출한 자격증 뷰어 + 승인/반려(사유 입력)</li>
+                <li><strong>[필수]</strong> 의뢰서 내용, 오고 간 견적 비용, 매칭 프로세스 데이터 모니터링</li>
+                <li><strong>[필수]</strong> 알림톡 템플릿 발송 트리거 관리</li>
+              </ul>
+
+              <h3>3.4 공통/인프라</h3>
+              <ul>
+                <li><strong>[필수]</strong> JWT 기반 인증 + RBAC 권한 분리 (의뢰인/행정사/관리자)</li>
+                <li><strong>[필수]</strong> AWS S3 라이프사이클 자동 전이 (Standard → Standard-IA → Glacier Instant Retrieval)</li>
+                <li><strong>[필수]</strong> 카카오 알림톡 BizMessage API + 서명 토큰 기반 딥링크</li>
+                <li><strong>[필수]</strong> 알림톡 발송 큐(SQS) + 실패 재시도 + LMS/SMS 폴백</li>
+                <li><strong>[필수]</strong> Cross-Region Replication 기반 백업</li>
+              </ul>
+
+              <h2>4. 비기능 요구사항</h2>
+              <table>
+                <thead>
+                  <tr><th>항목</th><th>요구사항</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>성능</td><td>주요 페이지 LCP 2.5초 이내, API p95 응답 300ms 이내</td></tr>
+                  <tr><td>보안</td><td>HTTPS, JWT 인증, OWASP Top 10 대응, 자격증/사업자등록증 암호화 저장, 의뢰인 연락처 블라인드</td></tr>
+                  <tr><td>확장성</td><td>EC2 Auto Scaling / RDS Read Replica 구성 가능한 아키텍처</td></tr>
+                  <tr><td>가용성</td><td>99.5% 이상 (월 약 3.6시간 다운타임 허용)</td></tr>
+                  <tr><td>호환성</td><td>모바일/PC 반응형, Chrome/Safari/Edge 최신 2버전</td></tr>
+                  <tr><td>접근성</td><td>WCAG 2.1 AA 기준 핵심 화면 준수</td></tr>
+                  <tr><td>개인정보</td><td>개인정보보호법 준수, 자격증/사업자등록증 별도 암호화 보관</td></tr>
+                </tbody>
+              </table>
+
+              <h2>5. 기술 제약사항</h2>
+              <ul>
+                <li><strong>인프라</strong>: AWS 클라우드 환경 (EC2 / RDS / S3 / CloudFront / SQS / Lambda)</li>
+                <li><strong>알림</strong>: 카카오 알림톡 BizMessage API (사업자 인증 + 템플릿 사전 승인 필수)</li>
+                <li><strong>채팅</strong>: Sendbird 통합 (월정액 라이선스 비용은 클라이언트 부담)</li>
+                <li><strong>로그인</strong>: 카카오 / 네이버 / Google OAuth 2.0</li>
+                <li><strong>본인인증</strong>: 행정사 본인확인 위해 NICE 본인인증 연동 협의 (선택)</li>
+              </ul>
+
+              <h2>6. 범위 외 사항 (Out of Scope)</h2>
+              <ul>
+                <li>네이티브 모바일 앱 (iOS / Android) — 반응형 웹으로 모바일 대응</li>
+                <li>결제 시스템 (의뢰인↔행정사 직접 결제는 외부 진행, 추후 Phase 2 협의)</li>
+                <li>실시간 화상 상담 (1:1 메시지로 대체, Phase 2 협의)</li>
+                <li>AI 자동 매칭/추천 엔진 (현 단계는 카테고리 기반 단순 매칭)</li>
+                <li>커뮤니티/SNS 본격 기능 (게시판, 팔로우 등은 Phase 2 협의)</li>
+                <li>다국어 (한국어 단일 지원)</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+
+        <!-- Timeline -->
+        <div id="page-timeline" class="page-section space-y-6">
+          <div class="rounded-2xl border border-slate-200/70 bg-white/95 p-5 shadow-soft backdrop-blur md:p-8">
+            <article class="doc-content">
+              <h1>일정 제안</h1>
+              <blockquote>총 90일 (12주) 기준 단계별 마일스톤 및 산출물을 제안합니다. 클라이언트가 명시한 4·8·10·12주 체크포인트를 그대로 수용합니다.</blockquote>
+
+              <h2>전체 일정 요약</h2>
+              <table>
+                <thead>
+                  <tr><th>단계</th><th>기간</th><th>주요 산출물</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Phase 1 · 기획/설계</td><td>Day 1–14 (2주)</td><td>요구사항 정의서, 화면 설계서(스토리보드), ERD, API 명세</td></tr>
+                  <tr><td>Phase 2 · UI/UX 디자인</td><td>Day 15–28 (2주)</td><td>Figma 디자인 시스템 + 의뢰인/행정사/관리자 반응형 디자인 (4주차 컨펌)</td></tr>
+                  <tr><td>Phase 3 · 핵심 기능 개발</td><td>Day 29–56 (4주)</td><td>의뢰서·견적·매칭 코어 기능, 인증, 카카오 알림톡, 1:1 메시지 (8주차 완료)</td></tr>
+                  <tr><td>Phase 4 · 관리자 + 부가 기능</td><td>Day 57–70 (2주)</td><td>통계 대시보드, 자격증 승인/반려, 알림톡 템플릿 관리</td></tr>
+                  <tr><td>Phase 5 · 통합 테스트</td><td>Day 71–84 (2주)</td><td>통합 테스트, 부하 테스트, 보안 점검 (10주차 완료)</td></tr>
+                  <tr><td>Phase 6 · 오픈/배포</td><td>Day 85–90 (1주)</td><td>스테이징 검수, 운영 배포, 관리자 매뉴얼 (12주차 오픈)</td></tr>
+                </tbody>
+              </table>
+            </article>
+          </div>
+
+          <div class="rounded-2xl border border-slate-200/70 bg-white/95 p-5 shadow-soft backdrop-blur md:p-8">
+            <h2 class="mb-4 text-sm font-semibold tracking-[0.14em] text-slate-500">상세 타임라인</h2>
+            <div class="timeline">
+              <div class="timeline-item">
+                <p class="text-sm font-semibold tracking-[0.14em] text-sky-700">PHASE 1</p>
+                <h4 class="text-base font-semibold text-slate-900">기획 및 설계</h4>
+                <p class="mb-1 text-sm font-semibold text-amber-600">Day 1–14</p>
+                <p class="text-sm leading-7 text-slate-600">요구사항 인터뷰, 정책 정의 (예: 자격증 검증 기준, 알림톡 트리거 규칙), 화면 설계서(약 42화면) 작성, ERD 및 API 명세 v1 확정.</p>
+                <ul class="mt-2 list-disc pl-5 text-sm text-slate-500">
+                  <li>산출물: 요구사항 정의서, 스토리보드, ERD, OpenAPI 명세 v1</li>
+                </ul>
+              </div>
+              <div class="timeline-item">
+                <p class="text-sm font-semibold tracking-[0.14em] text-sky-700">PHASE 2</p>
+                <h4 class="text-base font-semibold text-slate-900">UI/UX 디자인 & 컨펌 (4주차 마일스톤)</h4>
+                <p class="mb-1 text-sm font-semibold text-amber-600">Day 15–28</p>
+                <p class="text-sm leading-7 text-slate-600">디자인 시스템 → 의뢰인/행정사/관리자 반응형 디자인 → 클라이언트 컨펌. 4주차 종료 시 기획/디자인 전체 컨펌 완료.</p>
+                <ul class="mt-2 list-disc pl-5 text-sm text-slate-500">
+                  <li>산출물: Figma 원본 파일, 디자인 컴포넌트 라이브러리</li>
+                  <li>마일스톤 M1: 기획/디자인 컨펌 (Day 28)</li>
+                </ul>
+              </div>
+              <div class="timeline-item">
+                <p class="text-sm font-semibold tracking-[0.14em] text-sky-700">PHASE 3</p>
+                <h4 class="text-base font-semibold text-slate-900">핵심 기능 개발 (의뢰/견적/매칭/알림) — 8주차 마일스톤</h4>
+                <p class="mb-1 text-sm font-semibold text-amber-600">Day 29–56</p>
+                <p class="text-sm leading-7 text-slate-600">의뢰인·행정사 인증 + 의뢰서 작성·파일 업로드 + 견적서 제출/비교 + 카카오 알림톡 + 1:1 메시지(Sendbird) 통합. 8주차 종료 시 코어 기능 동작.</p>
+                <ul class="mt-2 list-disc pl-5 text-sm text-slate-500">
+                  <li>산출물: 의뢰인·행정사 화면, API 서버, 알림톡 연동, 채팅 통합</li>
+                  <li>마일스톤 M2: 핵심 기능 개발 완료 (Day 56)</li>
+                </ul>
+              </div>
+              <div class="timeline-item">
+                <p class="text-sm font-semibold tracking-[0.14em] text-sky-700">PHASE 4</p>
+                <h4 class="text-base font-semibold text-slate-900">관리자 + 부가 기능</h4>
+                <p class="mb-1 text-sm font-semibold text-amber-600">Day 57–70</p>
+                <p class="text-sm leading-7 text-slate-600">통계 대시보드(Chart.js), 자격증 뷰어 + 승인/반려, 회원/행정사 관리, 알림톡 템플릿 트리거 관리 UI.</p>
+                <ul class="mt-2 list-disc pl-5 text-sm text-slate-500">
+                  <li>산출물: 관리자 웹, 통계 대시보드, 자격증 승인 워크플로우</li>
+                </ul>
+              </div>
+              <div class="timeline-item">
+                <p class="text-sm font-semibold tracking-[0.14em] text-sky-700">PHASE 5</p>
+                <h4 class="text-base font-semibold text-slate-900">통합 테스트 (10주차 마일스톤)</h4>
+                <p class="mb-1 text-sm font-semibold text-amber-600">Day 71–84</p>
+                <p class="text-sm leading-7 text-slate-600">시나리오 기반 통합 테스트(의뢰 → 매칭 → 견적 → 메시지 → 매칭 → 리뷰), 부하 테스트, 보안 점검(OWASP), 알림톡 발송 검증.</p>
+                <ul class="mt-2 list-disc pl-5 text-sm text-slate-500">
+                  <li>산출물: 테스트 결과서, 버그 수정 내역, 성능 측정 리포트</li>
+                  <li>마일스톤 M3: 통합 테스트 완료 (Day 84)</li>
+                </ul>
+              </div>
+              <div class="timeline-item">
+                <p class="text-sm font-semibold tracking-[0.14em] text-sky-700">PHASE 6</p>
+                <h4 class="text-base font-semibold text-slate-900">오픈/배포 (12주차 마일스톤)</h4>
+                <p class="mb-1 text-sm font-semibold text-amber-600">Day 85–90</p>
+                <p class="text-sm leading-7 text-slate-600">스테이징 최종 검수, 운영 배포, 도메인/SSL 연결, 모니터링/로깅 셋업, 관리자 매뉴얼 및 인수인계.</p>
+                <ul class="mt-2 list-disc pl-5 text-sm text-slate-500">
+                  <li>산출물: 운영 배포 환경, 관리자 매뉴얼, 인수인계 문서, Git 저장소 이전</li>
+                  <li>마일스톤 M4: 정식 오픈 (Day 90)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="rounded-2xl border border-slate-200/70 bg-white/95 p-5 shadow-soft backdrop-blur md:p-8">
+            <article class="doc-content">
+              <h2>마일스톤 체크포인트</h2>
+              <table>
+                <thead>
+                  <tr><th>마일스톤</th><th>시점</th><th>검수 기준</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>M1: 기획/디자인 컨펌</td><td>Day 28 (4주차)</td><td>스토리보드·Figma·ERD·API 명세 승인</td></tr>
+                  <tr><td>M2: 핵심 기능 개발 완료</td><td>Day 56 (8주차)</td><td>의뢰서→견적→매칭→리뷰 시나리오 동작 검증</td></tr>
+                  <tr><td>M3: 통합 테스트 완료</td><td>Day 84 (10주차)</td><td>버그 0 (Critical), 부하 테스트 통과, 보안 점검 통과</td></tr>
+                  <tr><td>M4: 정식 오픈</td><td>Day 90 (12주차)</td><td>운영 환경 배포, 관리자 매뉴얼 인계, 1개월 하자 보수 진입</td></tr>
+                </tbody>
+              </table>
+
+              <h2>커뮤니케이션 계획</h2>
+              <table>
+                <tr><th>항목</th><th>방식</th><th>주기</th></tr>
+                <tr><td>일일 진행 공유</td><td>Slack / 카카오톡</td><td>매일</td></tr>
+                <tr><td>주간 미팅</td><td>Zoom / Google Meet</td><td>주 1회</td></tr>
+                <tr><td>마일스톤 리뷰</td><td>화면 시연 + 문서 검수</td><td>단계 완료 시</td></tr>
+                <tr><td>이슈 트래킹</td><td>GitHub Issues / Notion</td><td>상시</td></tr>
+              </table>
+            </article>
+          </div>
+        </div>
+
+        <!-- Portfolio -->
+        <div id="page-portfolio" class="page-section space-y-6">
+          <div class="rounded-2xl border border-slate-200/70 bg-white/95 p-5 shadow-soft backdrop-blur md:p-8">
+            <article class="doc-content">
+              <h1>유사 프로젝트 경험</h1>
+              <blockquote>본 프로젝트(다중 액터 O2O 매칭 + 자격 인증 + 알림 워크플로우)와 직접 매핑되는 수행 경험을 소개합니다.</blockquote>
+            </article>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+            <div class="rounded-2xl border border-slate-200/70 bg-white/90 p-4 text-center shadow-soft backdrop-blur">
+              <p class="text-2xl font-bold text-sky-700">13+</p>
+              <p class="mt-1 text-sm text-slate-500">완료 프로젝트</p>
+            </div>
+            <div class="rounded-2xl border border-slate-200/70 bg-white/90 p-4 text-center shadow-soft backdrop-blur">
+              <p class="text-2xl font-bold text-sky-700">4건</p>
+              <p class="mt-1 text-sm text-slate-500">유사 매칭/플랫폼 경험</p>
+            </div>
+            <div class="rounded-2xl border border-slate-200/70 bg-white/90 p-4 text-center shadow-soft backdrop-blur">
+              <p class="text-2xl font-bold text-sky-700">90일</p>
+              <p class="mt-1 text-sm text-slate-500">단계별 납품 일정</p>
+            </div>
+            <div class="rounded-2xl border border-slate-200/70 bg-white/90 p-4 text-center shadow-soft backdrop-blur">
+              <p class="text-2xl font-bold text-sky-700">100%</p>
+              <p class="mt-1 text-sm text-slate-500">기획~배포 풀스택 책임</p>
+            </div>
+          </div>
+
+          <div class="space-y-4">
+
+            <div class="rounded-2xl border border-slate-200/70 bg-white/90 p-5 shadow-soft backdrop-blur md:p-8">
+              <div class="mb-3 inline-flex rounded-full border px-2.5 py-1 text-sm font-semibold tracking-[0.12em] bg-sky-100 text-sky-700 border-sky-200">B2B SaaS · 헬스케어</div>
+              <h3 class="text-lg font-semibold tracking-tight text-slate-900">Harmony Link — 시니어 주간보호 관리 플랫폼</h3>
+              <p class="mt-1 text-sm text-slate-400">2025년 · 약 6개월 · 풀스택 100%</p>
+              <div class="mt-3 doc-content">
+                <h4>프로젝트 개요</h4>
+                <p>보호자 / 요양보호사 / 시설 관리자 3-actor 멀티테넌트 SaaS. 케어 로그, 투약 관리, 보호자 커뮤니케이션, 전자서명, AI 건강 분석을 통합. AWS CDK 기반 인프라.</p>
+                <h4>핵심 기능</h4>
+                <ul>
+                  <li>3-actor 권한 분리 + 다중 시설(테넌트) 데이터 격리</li>
+                  <li>요양보호사 자격 인증 / 시설 인증 워크플로우</li>
+                  <li>케어 로그 + 첨부 파일(사진/문서) 업로드 및 보호자 공유</li>
+                  <li>실시간 알림 (이상 상황 시 보호자/관리자 통보)</li>
+                  <li>전자서명 + AI 건강 분석 (OpenAI)</li>
+                </ul>
+                <h4>본 프로젝트와의 유사점</h4>
+                <ul>
+                  <li><strong>다중 액터 권한/플로우</strong>가 본 공고(의뢰인/행정사/관리자) 구조와 동일</li>
+                  <li><strong>자격 인증/서류 검토 워크플로우</strong>가 행정사 자격증 승인/반려와 직결</li>
+                  <li><strong>실시간 알림</strong> 패턴이 카카오 알림톡 트리거에 그대로 적용 가능</li>
+                  <li><strong>AWS CDK 인프라</strong>가 본 공고 AWS 환경 구성에 직결</li>
+                </ul>
+                <h4>기술 스택</h4>
+                <div class="flex flex-wrap gap-1.5 not-prose">
+                  <span class="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-sm text-slate-500">NestJS</span>
+                  <span class="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-sm text-slate-500">Next.js</span>
+                  <span class="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-sm text-slate-500">TypeScript</span>
+                  <span class="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-sm text-slate-500">MySQL</span>
+                  <span class="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-sm text-slate-500">AWS CDK</span>
+                  <span class="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-sm text-slate-500">Docker</span>
+                  <span class="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-sm text-slate-500">Flutter</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="rounded-2xl border border-slate-200/70 bg-white/90 p-5 shadow-soft backdrop-blur md:p-8">
+              <div class="mb-3 inline-flex rounded-full border px-2.5 py-1 text-sm font-semibold tracking-[0.12em] bg-sky-100 text-sky-700 border-sky-200">B2B 플랫폼 · 네트워킹</div>
+              <h3 class="text-lg font-semibold tracking-tight text-slate-900">Connectin — 디지털 명함 & 네트워킹 매칭 플랫폼</h3>
+              <p class="mt-1 text-sm text-slate-400">2025.05~2025.08 · 약 3개월 · 풀스택 100%</p>
+              <div class="mt-3 doc-content">
+                <h4>프로젝트 개요</h4>
+                <p>베트남 시장 출시. 디지털 명함 기반 사용자 매칭, BLE 근거리 탐색, Signal Protocol E2E 암호화 메시지, OCR 명함 스캔, Zalo 슈퍼앱 연동.</p>
+                <h4>핵심 기능</h4>
+                <ul>
+                  <li>프로필 카드 매칭 + 다양한 검색/필터</li>
+                  <li>1:1 메시지 (E2E 암호화)</li>
+                  <li>사용자 인증/약관 동의 워크플로우</li>
+                  <li>마이크로서비스 아키텍처 (12 서비스)</li>
+                  <li>크로스플랫폼 (Flutter 모바일 + Next.js 웹)</li>
+                </ul>
+                <h4>본 프로젝트와의 유사점</h4>
+                <ul>
+                  <li><strong>O2O 매칭 플랫폼</strong> 패턴이 본 공고(의뢰인↔행정사)와 동형</li>
+                  <li><strong>1:1 메시지 시스템</strong>이 본 공고 채팅 요구와 직접 매칭</li>
+                  <li><strong>프로필/카테고리 검색</strong>이 행정사 전문 분야 검색과 동일 패턴</li>
+                  <li><strong>3개월 풀스택 딜리버리 경험</strong>이 본 공고 90일 일정과 동일</li>
+                </ul>
+                <h4>기술 스택</h4>
+                <div class="flex flex-wrap gap-1.5 not-prose">
+                  <span class="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-sm text-slate-500">Next.js</span>
+                  <span class="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-sm text-slate-500">React</span>
+                  <span class="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-sm text-slate-500">TypeScript</span>
+                  <span class="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-sm text-slate-500">Express</span>
+                  <span class="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-sm text-slate-500">PostgreSQL</span>
+                  <span class="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-sm text-slate-500">Flutter</span>
+                  <span class="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-sm text-slate-500">마이크로서비스</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="rounded-2xl border border-slate-200/70 bg-white/90 p-5 shadow-soft backdrop-blur md:p-8">
+              <div class="mb-3 inline-flex rounded-full border px-2.5 py-1 text-sm font-semibold tracking-[0.12em] bg-sky-100 text-sky-700 border-sky-200">B2B SaaS · 전자결재</div>
+              <h3 class="text-lg font-semibold tracking-tight text-slate-900">EZ-Approve — 전자결재 SaaS</h3>
+              <p class="mt-1 text-sm text-slate-400">2026.01~2026.03 · 약 9주 · 풀스택 100%</p>
+              <div class="mt-3 doc-content">
+                <h4>프로젝트 개요</h4>
+                <p>다단계 전자결재 엔진(8종 결재 액션), 7 사용자 역할 + 6계층 보안, 50+ 페이지 + 120~150 API 엔드포인트 규모의 기업용 어드민 SaaS.</p>
+                <h4>핵심 기능</h4>
+                <ul>
+                  <li>다단계 결재 워크플로우 + 승인/반려(사유 입력)</li>
+                  <li>관리자 대시보드 + 통계/필터링/모니터링</li>
+                  <li>RBAC 7 역할 + 6계층 보안 (네트워크/세션/권한/감사 로그)</li>
+                  <li>파일 첨부 + 전자서명 + 감사 추적</li>
+                  <li>리치 에디터 + 실시간 공동 편집 (Lexical + Yjs)</li>
+                </ul>
+                <h4>본 프로젝트와의 유사점</h4>
+                <ul>
+                  <li><strong>승인/반려(사유) 워크플로우</strong>가 행정사 자격증 승인 요구와 동형</li>
+                  <li><strong>관리자 대시보드/통계</strong>가 본 공고 통계 대시보드 요구와 동일 패턴</li>
+                  <li><strong>RBAC 권한 모델</strong>이 본 공고 3-actor 권한 분리에 직접 적용</li>
+                  <li><strong>9주 풀스택 딜리버리</strong>가 본 공고 90일 단위와 동등 규모</li>
+                </ul>
+                <h4>기술 스택</h4>
+                <div class="flex flex-wrap gap-1.5 not-prose">
+                  <span class="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-sm text-slate-500">NestJS 10</span>
+                  <span class="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-sm text-slate-500">Next.js 13</span>
+                  <span class="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-sm text-slate-500">TypeScript</span>
+                  <span class="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-sm text-slate-500">MySQL 8</span>
+                  <span class="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-sm text-slate-500">CASL (RBAC)</span>
+                  <span class="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-sm text-slate-500">Docker</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="rounded-2xl border border-slate-200/70 bg-white/90 p-5 shadow-soft backdrop-blur md:p-8">
+              <div class="mb-3 inline-flex rounded-full border px-2.5 py-1 text-sm font-semibold tracking-[0.12em] bg-sky-100 text-sky-700 border-sky-200">B2B2C 앱 · O2O</div>
+              <h3 class="text-lg font-semibold tracking-tight text-slate-900">Pilates App — 필라테스 프랜차이즈 예약/CRM</h3>
+              <p class="mt-1 text-sm text-slate-400">2019.09~2019.12 · 약 4개월 · 풀스택 100%</p>
+              <div class="mt-3 doc-content">
+                <h4>프로젝트 개요</h4>
+                <p>고객 / 강사 / 본사 관리자 3-actor B2B2C 플랫폼. 수업 예약, 강사 관리, 출결, 결제, CRM, 커뮤니티. Android / iOS / Web 동시 출시.</p>
+                <h4>핵심 기능</h4>
+                <ul>
+                  <li>고객↔전문가(강사) 매칭/예약 워크플로우</li>
+                  <li>결제 시스템 + 결제 알림</li>
+                  <li>3 플랫폼(Android/iOS/Web) 동시 출시 운영</li>
+                  <li>본사 관리자 CRM 대시보드</li>
+                  <li>실시간 푸시 알림</li>
+                </ul>
+                <h4>본 프로젝트와의 유사점</h4>
+                <ul>
+                  <li><strong>고객↔전문가 O2O 매칭</strong>이 의뢰인↔행정사 구조와 동형</li>
+                  <li><strong>3-actor 권한 모델</strong>이 본 공고와 동일 구조</li>
+                  <li><strong>본사 관리자 통합 CRM</strong>이 본 공고 관리자 페이지와 직결</li>
+                </ul>
+                <h4>기술 스택</h4>
+                <div class="flex flex-wrap gap-1.5 not-prose">
+                  <span class="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-sm text-slate-500">React Native</span>
+                  <span class="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-sm text-slate-500">React</span>
+                  <span class="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-sm text-slate-500">Node.js</span>
+                  <span class="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-sm text-slate-500">JavaScript</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="rounded-2xl border border-sky-200/70 bg-gradient-to-br from-sky-50 to-brand-50 p-6 text-center shadow-soft md:p-10">
+            <h2 class="text-xl font-bold tracking-tight text-slate-900 md:text-2xl">함께 만들어 가겠습니다</h2>
+            <p class="mx-auto mt-3 max-w-lg text-sm leading-7 text-slate-600">프로젝트에 대해 더 자세한 논의를 원하시면 미팅을 신청해 주세요.</p>
+          </div>
+        </div>
+
+        <div id="page-nav" class="mt-6 flex items-center justify-between gap-4" style="display:none;">
+          <a id="nav-prev" href="#home"
+             class="group flex items-center gap-2 rounded-2xl border border-slate-200/70 bg-white/90 px-5 py-3 shadow-soft backdrop-blur transition hover:-translate-y-0.5 hover:border-sky-200 hover:bg-white">
+            <svg class="w-5 h-5 text-slate-400 transition group-hover:text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+            <span>
+              <span class="block text-xs text-slate-400">이전</span>
+              <span id="nav-prev-label" class="block text-sm font-semibold text-slate-700 group-hover:text-sky-700">홈</span>
+            </span>
+          </a>
+          <a id="nav-next" href="#overview"
+             class="group flex items-center gap-2 rounded-2xl border border-slate-200/70 bg-white/90 px-5 py-3 shadow-soft backdrop-blur transition hover:-translate-y-0.5 hover:border-sky-200 hover:bg-white text-right ml-auto">
+            <span>
+              <span class="block text-xs text-slate-400">다음</span>
+              <span id="nav-next-label" class="block text-sm font-semibold text-slate-700 group-hover:text-sky-700">프로젝트 소개</span>
+            </span>
+            <svg class="w-5 h-5 text-slate-400 transition group-hover:text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+
+      </main>
+    </div>
+
+    <footer class="mt-10 border-t border-slate-200 pt-6 text-xs text-slate-500">
+      &copy; 2026 &middot; 본 제안서는 행정사–의뢰인 견적 비교 매칭 플랫폼 프로젝트를 위해 작성되었습니다.
+    </footer>
+  </div>
+
+  <script>
+    const pages = ['home', 'overview', 'estimate', 'manday', 'prd', 'timeline', 'portfolio'];
+    const pageLabels = {
+      home: '홈', overview: '프로젝트 소개', estimate: '견적서',
+      manday: '공수계산서', prd: 'PRD', timeline: '일정 제안', portfolio: '유사 프로젝트 경험'
+    };
+
+    function navigate(pageId) {
+      if (!pages.includes(pageId)) pageId = 'home';
+      document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
+      const target = document.getElementById('page-' + pageId);
+      if (target) target.classList.add('active');
+      document.querySelectorAll('.nav-link').forEach(link => {
+        if (link.dataset.page === pageId) {
+          link.className = 'nav-link block rounded-xl border px-3 py-2 text-sm border-sky-200 bg-sky-50 font-medium text-sky-700';
+        } else {
+          link.className = 'nav-link block rounded-xl border border-transparent px-3 py-2 text-sm text-slate-600 hover:border-slate-200 hover:bg-slate-50 hover:text-slate-900';
+        }
+      });
+      updatePageNav(pageId);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      closeSidebar();
+    }
+
+    function updatePageNav(pageId) {
+      const nav = document.getElementById('page-nav');
+      const idx = pages.indexOf(pageId);
+      const prevBtn = document.getElementById('nav-prev');
+      const nextBtn = document.getElementById('nav-next');
+      const prevLabel = document.getElementById('nav-prev-label');
+      const nextLabel = document.getElementById('nav-next-label');
+
+      nav.style.display = (pageId === 'home') ? 'none' : 'flex';
+
+      if (idx > 0) {
+        prevBtn.href = '#' + pages[idx - 1];
+        prevLabel.textContent = pageLabels[pages[idx - 1]];
+        prevBtn.style.visibility = 'visible';
+      } else {
+        prevBtn.style.visibility = 'hidden';
+      }
+
+      if (idx < pages.length - 1) {
+        nextBtn.href = '#' + pages[idx + 1];
+        nextLabel.textContent = pageLabels[pages[idx + 1]];
+        nextBtn.style.visibility = 'visible';
+      } else {
+        nextBtn.style.visibility = 'hidden';
+      }
+    }
+
+    function closeSidebar() {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('sidebar-backdrop').classList.remove('open');
+    }
+
+    function handleHash() {
+      const hash = (location.hash || '#home').replace('#', '');
+      navigate(hash);
+    }
+    window.addEventListener('hashchange', handleHash);
+    window.addEventListener('DOMContentLoaded', handleHash);
+
+    document.getElementById('sidebar-toggle').addEventListener('click', function() {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.getElementById('sidebar-backdrop').classList.toggle('open');
+    });
+  </script>
+</body>
+</html>
